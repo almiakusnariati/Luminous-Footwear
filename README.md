@@ -11,7 +11,7 @@ Aplikasi penjualan sepatu berbasis web yang memungkinkan pelanggan untuk melihat
 
 
 ###  ERD
-![ERD Diagram](../frontend/public/erd.PNG)
+![ERD Diagram](./frontend/public/erd.PNG)
 
 
 ## Tech Stack
