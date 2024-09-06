@@ -1,10 +1,10 @@
 package com.miaaa.demo.config;
 
-import java.io.IOException;
-
-import com.miaaa.demo.model.User;
-import com.miaaa.demo.repository.UserRepository;
-import com.miaaa.demo.service.JwtService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,12 +13,11 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.miaaa.demo.model.User;
+import com.miaaa.demo.repository.UserRepository;
+import com.miaaa.demo.service.JwtService;
 
+import java.io.IOException;
 @Component
 public class RequestFilter extends OncePerRequestFilter {
 
@@ -34,15 +33,14 @@ public class RequestFilter extends OncePerRequestFilter {
     public void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain)
             throws IOException, ServletException {
-
-        Cookie[] cookies = request.getCookies();
-
+            Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             Long id = null;
 
             for (Cookie cookie : cookies) {
                 if ("token".equals(cookie.getName())) {
                     String token = cookie.getValue();
+                    System.out.println(token);
                     String subject;
                     try {
                         subject = jwtService.verify(token);

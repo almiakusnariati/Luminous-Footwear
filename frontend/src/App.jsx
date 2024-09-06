@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.js
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProductList from './components/ProductList';
+import UserProductList from './components/UserProductList';
+import UserProductDetails from './components/UserProductDetails';
+import Login from './components/Login';
+import Register from './components/Register';
+import ProductForm from './components/ProductForm';
+import About from './components/About';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+    return (
+        <Router>
+            <div className="App">
+                <main>
+                    <Routes>
+                        <Route path="/user/products" element={<UserProductList />} />
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+                        <Route path="/about" element={<About />} />
 
-export default App
+                        <Route path="/admin/products" element={<ProductList />} />
+                        
+                        <Route path="/user/product-details/:id" element={<UserProductDetails />} />
+                        
+                        <Route path="/user/products/login" element={<Login />} />
+                        <Route path="/user/products/register" element={<Register />} />
+                        
+                        <Route path="/add-product" element={<ProductForm />} />
+                        <Route path="/edit-product/:id" element={<ProductForm />} />
+                        
+                        <Route path="*" element={<UserProductList />} />
+                    </Routes>
+                </main>
+            </div>
+        </Router>
+    );
+};
+
+export default App;

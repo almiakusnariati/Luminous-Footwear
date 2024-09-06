@@ -11,23 +11,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @SuppressWarnings("removal")
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, RequestFilter requestFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, RequestFilter request) throws Exception {
         return http
-        .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) // Menonaktifkan CSRF jika menggunakan cookie
+                .cors() // Mengaktifkan CORS
+                .and()
                 .authorizeHttpRequests((auth) -> {
-                    auth.requestMatchers(HttpMethod.GET, "/api/auth/me").authenticated();
-                    auth.requestMatchers(HttpMethod.GET, "/api/auth/sign-out").authenticated();
+                    auth.requestMatchers(HttpMethod.GET, "/**").permitAll(); // Mengizinkan akses GET untuk API
+                    auth.requestMatchers(HttpMethod.POST, "/api/auth/sign-in").permitAll(); // Mengizinkan akses POST untuk sign-in
+                    auth.requestMatchers(HttpMethod.POST, "/api/auth/sign-up").permitAll();
+                    auth.anyRequest().authenticated(); // Semua permintaan lainnya memerlukan otentikasi
+                }).addFilterBefore(request,UsernamePasswordAuthenticationFilter.class) // Menambahkan filter sebelum UsernamePasswordAuthenticationFilter
 
-                    auth.anyRequest().permitAll();
-                })
-                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -35,4 +36,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
 }

@@ -1,6 +1,5 @@
 package com.miaaa.demo.service;
 
-
 import java.security.SecureRandom;
 import java.text.ParseException;
 
@@ -22,9 +21,9 @@ import jakarta.servlet.http.HttpServletResponse;
 @Service
 public class JwtService {
 
-    private static byte[] secretKey = new byte[32];
+    private static final byte[] secretKey = new byte[32]; 
 
-    public JwtService() {
+    static {
         new SecureRandom().nextBytes(secretKey);
     }
 
@@ -38,7 +37,8 @@ public class JwtService {
 
     public String verify(String token) throws ParseException, JOSEException {
         JWSObject jwsObject = JWSObject.parse(token);
-         JWSVerifier verifier = new MACVerifier(secretKey);
+        JWSVerifier verifier = new MACVerifier(secretKey);
+        System.out.println("masuk");
         if (jwsObject.verify(verifier)) {
             return jwsObject.getPayload().toString();
         } else {
